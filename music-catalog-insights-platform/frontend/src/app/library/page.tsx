@@ -89,7 +89,7 @@ export default function LibraryPage() {
       <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
           <h1 className="font-display text-2xl font-semibold">Your library</h1>
-          <p className="mt-1 text-sm text-muted">Songs you've saved from the iTunes catalog.</p>
+          <p className="mt-1 text-sm text-muted">  Songs you&apos;ve saved from the iTunes catalog.</p>
         </div>
         <Button asChild>
           <Link href="/search">Search for more songs</Link>
