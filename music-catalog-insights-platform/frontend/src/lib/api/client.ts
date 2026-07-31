@@ -1,7 +1,7 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { ApiErrorResponse } from "@/lib/types";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080/api";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://music-catalog-insights-platform.onrender.com/api";
 
 export const TOKEN_STORAGE_KEY = "mci_auth_token";
 
