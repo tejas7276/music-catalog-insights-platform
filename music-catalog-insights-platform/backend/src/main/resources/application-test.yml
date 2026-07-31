@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+security:
+  jwt:
+    secret: test-secret-key-for-junit-tests-must-be-at-least-32-characters
+    expiration-ms: 3600000
+app:
+  cors:
+    allowed-origins: http://localhost:3000
+itunes:
+  api:
+    base-url: https://itunes.apple.com
+ai:
+  gemini:
+    base-url: https://generativelanguage.googleapis.com
+    api-key: test-key
+    model: gemini-1.5-flash

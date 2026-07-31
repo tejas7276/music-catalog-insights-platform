@@ -1,0 +1,198 @@
+{
+  "info": {
+    "name": "Music Catalog Insights Platform",
+    "description": "REST API collection for the Music Catalog Insights Platform take-home project.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080/api" },
+    { "key": "token", "value": "" },
+    { "key": "songId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const json = pm.response.json();",
+                  "  pm.collectionVariables.set('token', json.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ada Lovelace\",\n  \"email\": \"ada@example.com\",\n  \"password\": \"SecurePass123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const json = pm.response.json();",
+                  "  pm.collectionVariables.set('token', json.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"ada@example.com\",\n  \"password\": \"SecurePass123\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Search",
+      "item": [
+        {
+          "name": "Search songs",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/search?query=shape of you&type=song",
+              "host": ["{{baseUrl}}"],
+              "path": ["search"],
+              "query": [
+                { "key": "query", "value": "shape of you" },
+                { "key": "type", "value": "song" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Library",
+      "item": [
+        {
+          "name": "Get library",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/library?page=0&size=12&sortBy=createdAt&direction=DESC",
+              "host": ["{{baseUrl}}"],
+              "path": ["library"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "12" },
+                { "key": "sortBy", "value": "createdAt" },
+                { "key": "direction", "value": "DESC" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get song by id",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/library/{{songId}}", "host": ["{{baseUrl}}"], "path": ["library", "{{songId}}"] }
+          }
+        },
+        {
+          "name": "Save song",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const json = pm.response.json();",
+                  "  pm.collectionVariables.set('songId', json.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "{{baseUrl}}/library", "host": ["{{baseUrl}}"], "path": ["library"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"appleCatalogId\": 1193701392,\n  \"title\": \"Shape of You\",\n  \"artistName\": \"Ed Sheeran\",\n  \"genre\": \"Pop\",\n  \"releaseDate\": \"2017-01-06\",\n  \"durationMillis\": 233712,\n  \"artworkUrl\": \"https://is1-ssl.mzstatic.com/image/thumb/example/100x100bb.jpg\",\n  \"userRating\": 5,\n  \"userNotes\": \"Great summer song\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update song",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "{{baseUrl}}/library/{{songId}}", "host": ["{{baseUrl}}"], "path": ["library", "{{songId}}"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userRating\": 4,\n  \"userNotes\": \"Updated notes\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete song",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/library/{{songId}}", "host": ["{{baseUrl}}"], "path": ["library", "{{songId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Analytics",
+      "item": [
+        {
+          "name": "Get analytics",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/analytics", "host": ["{{baseUrl}}"], "path": ["analytics"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "AI Insights",
+      "item": [
+        {
+          "name": "Generate insights",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/ai/insights", "host": ["{{baseUrl}}"], "path": ["ai", "insights"] }
+          }
+        }
+      ]
+    }
+  ]
+}
