@@ -71,7 +71,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorResponse> handleGenericException(Exception ex, HttpServletRequest request) {
         log.error("Unhandled exception occurred", ex);
-        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", request, null);
+        // TEMPORARY DIAGNOSTIC: surface the real exception in the response so it's visible
+        // in DevTools/Swagger without needing Render log access. Revert once root cause is found.
+        String diagnostic = ex.getClass().getName() + ": " + ex.getMessage();
+        Throwable cause = ex.getCause();
+        if (cause != null) {
+            diagnostic += " | caused by: " + cause.getClass().getName() + ": " + cause.getMessage();
+        }
+        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", request, List.of(diagnostic));
     }
 
     private ResponseEntity<ApiErrorResponse> buildResponse(
